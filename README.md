@@ -18,7 +18,10 @@
 
 ## 📸 Screenshots
 
-> *Premium dark-mode UI with glassmorphism, micro-animations, and a mobile-first bottom navigation.*
+<img width="1455" height="827" alt="Screenshot 2026-04-30 at 4 57 15 AM" src="https://github.com/user-attachments/assets/3118c8dc-2463-4b3a-ac0c-a92a0fcebd05" />
+<img width="1455" height="827" alt="Screenshot 2026-04-30 at 4 57 15 AM" src="https://github.com/user-attachments/assets/59fcc397-4ab5-43c1-9ee8-bba52f20f99a" />
+<img width="1455" height="827" alt="Screenshot 2026-04-30 at 4 57 15 AM" src="https://github.com/user-attachments/assets/4865bc10-9d8a-4c2b-8d43-4aae96d80cec" />
+<img width="1455" height="827" alt="Screenshot 2026-04-30 at 4 57 15 AM" src="https://github.com/user-attachments/assets/ac2b064b-4b31-42a6-8c5a-363345466dee" />
 
 ---
 
