@@ -17,11 +17,12 @@
 ---
 
 ## 📸 Screenshots
+<img width="1468" height="677" alt="Screenshot 2026-04-30 at 4 56 25 AM" src="https://github.com/user-attachments/assets/59d6c438-78d5-4c9b-94ef-d8d9d18fa814" />
+<img width="620" height="689" alt="Screenshot 2026-04-30 at 4 56 42 AM" src="https://github.com/user-attachments/assets/d036f333-869a-418a-8a63-b99509beade6" />
 
 <img width="1455" height="827" alt="Screenshot 2026-04-30 at 4 57 15 AM" src="https://github.com/user-attachments/assets/3118c8dc-2463-4b3a-ac0c-a92a0fcebd05" />
-<img width="1455" height="827" alt="Screenshot 2026-04-30 at 4 57 15 AM" src="https://github.com/user-attachments/assets/59fcc397-4ab5-43c1-9ee8-bba52f20f99a" />
-<img width="1455" height="827" alt="Screenshot 2026-04-30 at 4 57 15 AM" src="https://github.com/user-attachments/assets/4865bc10-9d8a-4c2b-8d43-4aae96d80cec" />
-<img width="1455" height="827" alt="Screenshot 2026-04-30 at 4 57 15 AM" src="https://github.com/user-attachments/assets/ac2b064b-4b31-42a6-8c5a-363345466dee" />
+<img width="1470" height="833" alt="Screenshot 2026-04-30 at 4 57 01 AM" src="https://github.com/user-attachments/assets/2a5156b9-ca60-4414-919c-ec581147721d" />
+
 
 ---
 
