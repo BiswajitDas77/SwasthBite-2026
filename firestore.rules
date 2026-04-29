@@ -1,0 +1,92 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 0. Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // --- Validations ---
+
+    function isValidFood(data) {
+      return data.name_en is string && data.name_en.size() <= 200
+          && data.diet_type in ['veg', 'egg', 'non_veg', 'jain', 'satvik']
+          && data.calories_per_100g is number
+          && data.protein_per_100g is number;
+    }
+
+    function isValidUserProfile(data) {
+      return (data.name == null || (data.name is string && data.name.size() <= 100))
+          && (data.age == null || (data.age is int && data.age >= 0 && data.age <= 120))
+          && (data.weight_kg == null || (data.weight_kg is number && data.weight_kg > 0))
+          && (!data.keys().hasAny(['isAdmin', 'role'])); // Prevent privilege escalation
+    }
+
+    function isValidMealLog(data) {
+      return data.quantity_g is number && data.quantity_g > 0
+          && data.quantity_g <= 5000 // Realistic limit for a single meal
+          && (data.logged_at == null || data.logged_at == request.time);
+    }
+
+    // --- Collections ---
+
+    match /foods/{foodId} {
+      allow read: if isSignedIn();
+      allow write: if false; // Only system/admin can write
+    }
+
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUserProfile(incoming());
+      allow update: if isOwner(userId) && isValidUserProfile(incoming())
+                    && (incoming().diff(existing()).affectedKeys().hasOnly([
+                      'name', 'age', 'sex', 'weight_kg', 'height_cm', 'state', 'city', 
+                      'agmarknet_city', 'cuisine_prefs', 'diet_type', 'health_goal', 
+                      'health_conditions', 'fasting_types', 'budget_per_day', 
+                      'max_prep_time_min', 'complexity_max', 'daily_cal_target', 
+                      'daily_protein_g', 'daily_fibre_g', 'updated_at'
+                    ]));
+                    
+      match /meal_logs/{logId} {
+        allow list: if isOwner(userId);
+        allow get: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidMealLog(incoming());
+        allow delete: if isOwner(userId);
+      }
+
+      match /aarogya_scores/{scoreId} {
+        allow list: if isOwner(userId);
+        allow get: if isOwner(userId);
+        allow create, update: if isOwner(userId); // Simplified for demo, should be system-driven
+      }
+
+      match /vouchers/{voucherId} {
+        allow list: if isOwner(userId);
+        allow get: if isOwner(userId);
+        allow update: if isOwner(userId) && incoming().diff(existing()).affectedKeys().hasOnly(['card_revealed', 'redeemed']);
+      }
+    }
+  }
+}

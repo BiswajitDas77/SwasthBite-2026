@@ -1,0 +1,157 @@
+{
+  "entities": {
+    "Food": {
+      "title": "Food",
+      "description": "Regional Indian food database entry",
+      "type": "object",
+      "properties": {
+        "name_en": { "type": "string" },
+        "name_hi": { "type": "string" },
+        "name_regional": { "type": "string" },
+        "cuisine_region": { "type": "array", "items": { "type": "string" } },
+        "diet_type": { "type": "string", "enum": ["veg", "egg", "non_veg", "jain", "satvik"] },
+        "is_fasting_approved": { "type": "boolean" },
+        "fasting_types": { "type": "array", "items": { "type": "string" } },
+        "calories_per_100g": { "type": "number" },
+        "protein_per_100g": { "type": "number" },
+        "carbs_per_100g": { "type": "number" },
+        "fat_per_100g": { "type": "number" },
+        "fibre_per_100g": { "type": "number" },
+        "iron_mg": { "type": "number" },
+        "calcium_mg": { "type": "number" },
+        "potassium_mg": { "type": "number" },
+        "sodium_mg": { "type": "number" },
+        "phosphorus_mg": { "type": "number" },
+        "vitamin_c_mg": { "type": "number" },
+        "vitamin_b12_mcg": { "type": "number" },
+        "glycemic_index": { "type": "integer" },
+        "glycemic_load": { "type": "number" },
+        "standard_portion_g": { "type": "number" },
+        "portion_unit": { "type": "string" },
+        "prep_time_min": { "type": "integer" },
+        "complexity_score": { "type": "integer" },
+        "cost_per_100g_base": { "type": "number" },
+        "season": { "type": "array", "items": { "type": "string" } },
+        "created_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name_en", "diet_type", "calories_per_100g", "protein_per_100g"]
+    },
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "User nutrition and health profile",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "age": { "type": "integer" },
+        "sex": { "type": "string" },
+        "weight_kg": { "type": "number" },
+        "height_cm": { "type": "number" },
+        "state": { "type": "string" },
+        "city": { "type": "string" },
+        "agmarknet_city": { "type": "string" },
+        "cuisine_prefs": { "type": "array", "items": { "type": "string" } },
+        "diet_type": { "type": "string" },
+        "health_goal": { "type": "string" },
+        "health_conditions": { "type": "array", "items": { "type": "string" } },
+        "fasting_types": { "type": "array", "items": { "type": "string" } },
+        "budget_per_day": { "type": "number" },
+        "max_prep_time_min": { "type": "integer" },
+        "complexity_max": { "type": "integer" },
+        "daily_cal_target": { "type": "number" },
+        "daily_protein_g": { "type": "number" },
+        "daily_fibre_g": { "type": "number" },
+        "is_fasting_enabled": { "type": "boolean" },
+        "upcoming_fasting_dates": { "type": "array", "items": { "type": "string" } },
+        "updated_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "MealLog": {
+      "title": "Meal Log",
+      "description": "Captured meal data",
+      "type": "object",
+      "properties": {
+        "food_id": { "type": "string" },
+        "meal_type": { "type": "string" },
+        "quantity_g": { "type": "number" },
+        "logged_at": { "type": "string", "format": "date-time" },
+        "scan_image_url": { "type": "string" },
+        "is_fasting_meal": { "type": "boolean" },
+        "calories": { "type": "number" },
+        "protein_g": { "type": "number" },
+        "fibre_g": { "type": "number" },
+        "iron_mg": { "type": "number" }
+      },
+      "required": ["quantity_g"]
+    },
+    "AarogyaScore": {
+      "title": "Aarogya Score",
+      "description": "Daily health score components",
+      "type": "object",
+      "properties": {
+        "score_date": { "type": "string", "format": "date" },
+        "total_score": { "type": "integer" },
+        "protein_component": { "type": "number" },
+        "fibre_component": { "type": "number" },
+        "micro_component": { "type": "number" },
+        "calorie_component": { "type": "number" },
+        "variety_component": { "type": "number" },
+        "regularity_component": { "type": "number" },
+        "hydration_component": { "type": "number" }
+      }
+    },
+    "Voucher": {
+      "title": "User Voucher",
+      "description": "Reward vouchers earned by user",
+      "type": "object",
+      "properties": {
+        "brand": { "type": "string" },
+        "discount_amount": { "type": "integer" },
+        "discount_type": { "type": "string" },
+        "promo_code": { "type": "string" },
+        "deep_link": { "type": "string" },
+        "issued_at": { "type": "string", "format": "date-time" },
+        "expires_at": { "type": "string", "format": "date-time" },
+        "redeemed": { "type": "boolean" },
+        "card_revealed": { "type": "boolean" }
+      }
+    },
+    "ScanCorrection": {
+      "title": "Scan Correction",
+      "description": "User correction for AI misidentification",
+      "type": "object",
+      "properties": {
+        "original_name": { "type": "string" },
+        "corrected_name": { "type": "string" },
+        "original_grams": { "type": "number" },
+        "corrected_grams": { "type": "number" },
+        "created_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "/foods/{foodId}": {
+      "schema": "Food",
+      "description": "Public database of Indian foods"
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile data"
+    },
+    "/users/{userId}/meal_logs/{logId}": {
+      "schema": "MealLog",
+      "description": "User specific meal logs"
+    },
+    "/users/{userId}/aarogya_scores/{scoreId}": {
+      "schema": "AarogyaScore",
+      "description": "Daily scores for the user"
+    },
+    "/users/{userId}/vouchers/{voucherId}": {
+      "schema": "Voucher",
+      "description": "Vouchers earned by the user"
+    },
+    "/users/{userId}/scan_corrections/{correctionId}": {
+      "schema": "ScanCorrection",
+      "description": "User corrections for AI scans"
+    }
+  }
+}

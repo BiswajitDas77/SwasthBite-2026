@@ -1,0 +1,176 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+
+:root {
+    --neo-bg: #e0e5ec;
+    --neo-light: #ffffff;
+    --neo-shadow: #b8bec5;
+    --swastha-green: #3a6e00;
+    --swastha-lime: #a3e635;
+    --swastha-gradient: linear-gradient(135deg, #3a6e00 0%, #a3e635 100%);
+}
+
+body.landing-body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Outfit', sans-serif;
+    background: var(--neo-bg);
+    color: #31344b;
+    overflow-x: hidden;
+}
+
+/* --- NEUMORPHIC UTILITIES --- */
+
+.neo-card {
+    background: var(--neo-bg);
+    border-radius: 40px;
+    box-shadow: 20px 20px 60px var(--neo-shadow),
+                -20px -20px 60px var(--neo-light);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.neo-btn {
+    background: var(--neo-bg);
+    border-radius: 20px;
+    box-shadow: 6px 6px 12px var(--neo-shadow),
+                -6px -6px 12px var(--neo-light);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #444;
+}
+
+.neo-btn:hover {
+    box-shadow: 3px 3px 6px var(--neo-shadow),
+                -3px -3px 6px var(--neo-light);
+    transform: translateY(2px);
+}
+
+.neo-btn:active {
+    box-shadow: inset 4px 4px 8px var(--neo-shadow),
+                inset -4px -4px 8px var(--neo-light);
+}
+
+.neo-inset {
+    background: var(--neo-bg);
+    box-shadow: inset 8px 8px 16px var(--neo-shadow),
+                inset -8px -8px 16px var(--neo-light);
+}
+
+/* --- SECTIONS --- */
+
+.landing-section {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    background: var(--neo-bg);
+}
+
+.landing-section.hero-vibrant {
+    background: radial-gradient(circle at 50% 50%, #f0f4f8 0%, #e0e5ec 100%);
+}
+
+/* --- HERO --- */
+
+.hero-spline-container {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.8;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+}
+
+.hero-branding-neo {
+    font-size: clamp(4rem, 15vw, 10rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    background: var(--swastha-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(10px 10px 20px rgba(58, 110, 0, 0.2));
+    line-height: 0.8;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+}
+
+.hero-tagline {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto 3rem;
+}
+
+/* --- FEATURES --- */
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 3rem;
+    width: 100%;
+    max-width: 1200px;
+    z-index: 10;
+}
+
+.feature-card-neo {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.feature-image-wrapper {
+    width: 100%;
+    height: 200px;
+    border-radius: 25px;
+    overflow: hidden;
+}
+
+.feature-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.feature-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--swastha-green);
+    text-transform: uppercase;
+}
+
+.feature-desc {
+    font-size: 1rem;
+    color: #777;
+    line-height: 1.6;
+}
+
+/* --- LOGIN --- */
+
+.login-card-neo {
+    padding: 5rem;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+}
+
+.login-card-neo h2 {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+}

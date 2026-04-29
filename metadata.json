@@ -1,0 +1,13 @@
+{
+  "name": "SwasthBite",
+  "description": "AI Nutritionist specifically built for Indian regional diets with ICMR-based scoring, food scanning, and fasting support.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "AI Nutrition Analysis",
+    "Regional Indian Food Database",
+    "Fasting Support",
+    "Mandi Price Integration"
+  ]
+}

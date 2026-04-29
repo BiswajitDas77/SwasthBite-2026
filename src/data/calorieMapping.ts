@@ -1,0 +1,33 @@
+export const CALORIE_MAPPING: Record<string, number> = {
+    "adhirasam": 250, "aloo_gobi": 150, "aloo_matar": 180, "aloo_methi": 160,
+    "aloo_shimla_mirch": 170, "aloo_tikki": 200, "anarsa": 220, "ariselu": 240,
+    "bandar_laddu": 180, "basundi": 300, "bhatura": 300, "bhindi_masala": 180,
+    "biryani": 350, "boondi": 180, "butter_chicken": 400, "chak_hao_kheer": 280,
+    "cham_cham": 200, "chana_masala": 250, "chapati": 120, "chhena_kheeri": 260,
+    "chicken_razala": 380, "chicken_tikka": 220, "chicken_tikka_masala": 380,
+    "chikki": 150, "daal_baati_churma": 500, "daal_puri": 250, "dal_makhani": 350,
+    "dal_tadka": 220, "dharwad_pedha": 180, "doodhpak": 280, "double_ka_meetha": 350,
+    "dum_aloo": 300, "gajar_ka_halwa": 300, "gavvalu": 200, "ghevar": 350,
+    "gulab_jamun": 300, "imarti": 250, "jalebi": 300, "kachori": 250,
+    "kadai_paneer": 350, "kadhi_pakoda": 300, "kajjikaya": 220, "kakinada_khaja": 300,
+    "kalakand": 250, "karela_bharta": 120, "kofta": 350, "kuzhi_paniyaram": 180,
+    "lassi": 200, "ledikeni": 300, "litti_chokha": 400, "lyangcha": 150,
+    "maach_jhol": 250, "makki_di_roti_sarson_da_saag": 450, "malapua": 300,
+    "misi_roti": 200, "misti_doi": 250, "modak": 150, "mysore_pak": 300,
+    "naan": 250, "navrattan_korma": 350, "palak_paneer": 300, "paneer_butter_masala": 400,
+    "phirni": 250, "pithe": 200, "poha": 180, "poornalu": 250, "pootharekulu": 200,
+    "qubani_ka_meetha": 350, "rabri": 350, "ras_malai": 250, "rasgulla": 150,
+    "sandesh": 180, "shankarpali": 180, "sheer_korma": 300, "sheera": 250,
+    "shrikhand": 300, "sohan_halwa": 350, "sohan_papdi": 200, "sutar_feni": 300,
+    "unni_appam": 180,
+};
+
+export const PROTEIN_MAPPING: Record<string, number> = {
+    "dal_tadka": 8, "paneer_butter_masala": 14, "biryani": 15, "chana_masala": 10,
+    "chicken_tikka": 20, "palak_paneer": 12, "dal_makhani": 9, "chapati": 3,
+    "naan": 5, "poha": 4, "aloo_gobi": 3, "bhindi_masala": 3, "butter_chicken": 22,
+    "maach_jhol": 18, "chicken_razala": 20, "litti_chokha": 12, "daal_baati_churma": 15,
+    "kofta": 10, "kadai_paneer": 14, "shrikhand": 6, "misti_doi": 5, "modak": 3,
+    "rasgulla": 4, "lyangcha": 3, "chicken_tikka_masala": 22, "dum_aloo": 5,
+    "kadhi_pakoda": 8, "lassi": 6, "navrattan_korma": 10, "ras_malai": 6,
+};
