@@ -19,7 +19,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../../lib/utils';
 
 export default function ProfileSubpage() {
-  const { profile, refreshProfile } = useAuth();
+  const { profile, refreshProfile, stats } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({ ...profile });
 
@@ -172,9 +172,9 @@ export default function ProfileSubpage() {
            <div className="bg-emerald-600 rounded-[40px] p-8 text-white relative overflow-hidden shadow-2xl shadow-emerald-100">
               <div className="relative z-10 space-y-4">
                  <h4 className="font-display text-3xl uppercase leading-none">Sustainability <br /> Impact</h4>
-                 <p className="text-white/60 text-[0.6rem] font-bold uppercase tracking-widest">By choosing local Mandi produce, you saved 12kg of CO2 this month.</p>
+                 <p className="text-white/60 text-[0.6rem] font-bold uppercase tracking-widest">By choosing local Mandi produce, you saved {stats?.co2Saved?.toFixed(1)}kg of CO2 this month.</p>
                  <div className="pt-4 flex items-center gap-2">
-                    <div className="px-3 py-1 bg-white/20 rounded-full text-[0.6rem] font-black uppercase">Level 4 Eco-Chef</div>
+                    <div className="px-3 py-1 bg-white/20 rounded-full text-[0.6rem] font-black uppercase">Level {Math.floor((stats?.mandiMeals || 0) / 3) + 1} Eco-Chef</div>
                  </div>
               </div>
               <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl" />

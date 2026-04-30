@@ -134,7 +134,7 @@ export default function LandingPage() {
             <p className="text-xl text-gray-600 mb-10 leading-relaxed">
               Snap your meal for instant nutritional details and smart, AI-driven advice from Swastha AI.
             </p>
-            <button className="border-2 border-[#3a6e00] text-[#3a6e00] px-8 py-4 rounded-full font-bold text-lg hover:bg-[#3a6e00] hover:text-white transition-colors">
+            <button onClick={() => signIn()} className="border-2 border-[#3a6e00] text-[#3a6e00] px-8 py-4 rounded-full font-bold text-lg hover:bg-[#3a6e00] hover:text-white transition-colors">
               Try Snap with a Photo
             </button>
           </div>

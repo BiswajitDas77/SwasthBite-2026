@@ -20,16 +20,16 @@ import { cn } from '../../lib/utils';
 
 export default function MandiSubpage() {
   const [prices, setPrices] = useState([
-    { name: 'Moong Dal', price: 95, prev: 115, unit: 'kg', image: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=400&q=80', status: 'low' },
+    { name: 'Moong Dal', price: 95, prev: 115, unit: 'kg', image: 'https://images.unsplash.com/photo-1590594460031-99af28bde4d8?auto=format&fit=crop&w=400&q=80', status: 'low' },
     { name: 'Basmati Rice', price: 110, prev: 92, unit: 'kg', image: 'https://images.unsplash.com/photo-1586201375761-83865001e8ac?auto=format&fit=crop&w=400&q=80', status: 'high' },
     { name: 'Mustard Oil', price: 145, prev: 155, unit: 'L', image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=400&q=80', status: 'low' },
     { name: 'Paneer', price: 380, prev: 380, unit: 'kg', image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=400&q=80', status: 'normal' },
-    { name: 'Toor Dal', price: 150, prev: 130, unit: 'kg', image: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=400&q=80', status: 'high' },
+    { name: 'Toor Dal', price: 150, prev: 130, unit: 'kg', image: 'https://images.unsplash.com/photo-1590594460031-99af28bde4d8?auto=format&fit=crop&w=400&q=80', status: 'high' },
     { name: 'Wheat Flour', price: 40, prev: 45, unit: 'kg', image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=400&q=80', status: 'low' },
     { name: 'Onion', price: 80, prev: 30, unit: 'kg', image: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&w=400&q=80', status: 'high' },
     { name: 'Tomato', price: 20, prev: 60, unit: 'kg', image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=400&q=80', status: 'low' },
     { name: 'Potato', price: 25, prev: 35, unit: 'kg', image: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=400&q=80', status: 'low' },
-    { name: 'Ghee', price: 650, prev: 600, unit: 'kg', image: 'https://images.unsplash.com/photo-1627447959082-f470cdbb8b66?auto=format&fit=crop&w=400&q=80', status: 'high' },
+    { name: 'Ghee', price: 650, prev: 600, unit: 'kg', image: 'https://images.unsplash.com/photo-1634125712130-9115b0266015?auto=format&fit=crop&w=400&q=80', status: 'high' },
     { name: 'Sugar', price: 45, prev: 45, unit: 'kg', image: 'https://images.unsplash.com/photo-1581441363689-1f3c3c414635?auto=format&fit=crop&w=400&q=80', status: 'normal' },
     { name: 'Chickpeas', price: 120, prev: 100, unit: 'kg', image: 'https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=400&q=80', status: 'high' }
   ]);

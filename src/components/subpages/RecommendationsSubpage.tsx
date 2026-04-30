@@ -143,13 +143,17 @@ export default function RecommendationsSubpage() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-500 font-bold">Diet Type</p>
-                  <p className="text-xl font-black capitalize dark:text-white">{profile?.dietary_preferences?.[0] || 'Balanced'}</p>
+                  <p className="text-xl font-black capitalize dark:text-white">{profile?.health_goal || 'Stay Fit'}</p>
                 </div>
               </div>
             </div>
 
             <div className="space-y-6">
-              {meals.map((meal, idx) => (
+              {meals.filter(m => {
+                if (profile?.health_goal === 'GAIN MUSCLE') return m.protein.includes('g') && parseInt(m.protein) > 15;
+                if (profile?.health_goal === 'LOSE WEIGHT') return parseInt(m.calories) < 350;
+                return true;
+              }).map((meal, idx) => (
                 <div key={idx} className="bg-white dark:bg-[#1a1c23] rounded-[32px] p-6 shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col md:flex-row gap-8 transition-colors">
                   <div className="w-full md:w-64 h-48 rounded-2xl overflow-hidden shrink-0">
                     <img src={meal.image} alt={meal.name} className="w-full h-full object-cover" />

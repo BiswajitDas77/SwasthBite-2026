@@ -18,15 +18,15 @@ import {
 import { cn } from '../../lib/utils';
 
 export default function AarogyaSubpage({ onNavigate }: { onNavigate: (id: string) => void }) {
-  const { profile, aarogyaScore, recommendations } = useAuth();
+  const { profile, aarogyaScore, recommendations, stats } = useAuth();
 
   const metrics = [
-    { label: 'PROTEIN ADEQUACY', val: 45, target: 80, unit: 'g', color: 'bg-indigo-500', icon: Target, grad: 'from-indigo-600 to-purple-600', desc: 'Critical for muscle repair and enzyme production.' },
-    { label: 'FIBRE ADEQUACY', val: 12, target: 25, unit: 'g', color: 'bg-emerald-500', icon: Leaf, grad: 'from-emerald-500 to-teal-600', desc: 'Essential for gut microbiome health.' },
-    { label: 'MICRONUTRIENTS', val: 70, target: 100, unit: '%', color: 'bg-yellow-500', icon: Zap, grad: 'from-yellow-400 to-orange-500', desc: 'Vitamin & mineral diversity based on your regional diet.' },
-    { label: 'HYDRATION', val: 5, target: 8, unit: 'L', color: 'bg-blue-500', icon: Droplets, grad: 'from-blue-400 to-sky-600', desc: 'Optimal water intake for metabolic efficiency.' },
-    { label: 'CALORIE BALANCE', val: 1450, target: 2100, unit: 'kcal', color: 'bg-red-500', icon: Flame, grad: 'from-red-500 to-rose-600', desc: 'Energy intake relative to your BMR and activity.' },
-    { label: 'VARIETY SCORE', val: 6, target: 10, unit: '/10', color: 'bg-pink-500', icon: Brain, grad: 'from-pink-500 to-rose-400', desc: 'Diversity of food groups consumed today.' },
+    { label: 'PROTEIN ADEQUACY', val: stats.totalProtein, target: profile?.protein_target || 80, unit: 'g', color: 'bg-indigo-500', icon: Target, grad: 'from-indigo-600 to-purple-600', desc: 'Critical for muscle repair and enzyme production.' },
+    { label: 'FIBRE ADEQUACY', val: stats.totalFibre, target: 25, unit: 'g', color: 'bg-emerald-500', icon: Leaf, grad: 'from-emerald-500 to-teal-600', desc: 'Essential for gut microbiome health.' },
+    { label: 'MICRONUTRIENTS', val: stats.micronutrients, target: 100, unit: '%', color: 'bg-yellow-500', icon: Zap, grad: 'from-yellow-400 to-orange-500', desc: 'Vitamin & mineral diversity based on your regional diet.' },
+    { label: 'HYDRATION', val: stats.waterIntake, target: 8, unit: 'L', color: 'bg-blue-500', icon: Droplets, grad: 'from-blue-400 to-sky-600', desc: 'Optimal water intake for metabolic efficiency.' },
+    { label: 'CALORIE BALANCE', val: stats.totalCalories, target: profile?.calorie_target || 2100, unit: 'kcal', color: 'bg-red-500', icon: Flame, grad: 'from-red-500 to-rose-600', desc: 'Energy intake relative to your BMR and activity.' },
+    { label: 'VARIETY SCORE', val: stats.varietyScore, target: 10, unit: '/10', color: 'bg-pink-500', icon: Brain, grad: 'from-pink-500 to-rose-400', desc: 'Diversity of food groups consumed today.' },
   ];
 
   return (
@@ -95,7 +95,9 @@ export default function AarogyaSubpage({ onNavigate }: { onNavigate: (id: string
            </div>
 
            <div className="mt-12 space-y-4">
-              <div className="px-6 py-2 bg-gradient-to-r from-[#3a6e00] to-[#a3e635] text-white rounded-full text-[0.7rem] font-black tracking-[0.2em] uppercase shadow-xl shadow-lime-200">GRADE: OPTIMAL (A+)</div>
+              <div className="px-6 py-2 bg-gradient-to-r from-[#3a6e00] to-[#a3e635] text-white rounded-full text-[0.7rem] font-black tracking-[0.2em] uppercase shadow-xl shadow-lime-200">
+                GRADE: {aarogyaScore > 85 ? 'OPTIMAL (A+)' : aarogyaScore > 70 ? 'GOOD (B+)' : 'FAIR (C)'}
+              </div>
               <p className="text-sm font-bold text-gray-400 max-w-[280px] leading-relaxed mx-auto italic">
                 "{recommendations[0]}"
               </p>

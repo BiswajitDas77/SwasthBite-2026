@@ -13,9 +13,11 @@ import {
   Crown,
   CheckCircle2
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import { cn } from '../../lib/utils';
 
 export default function RewardsSubpage() {
+  const { mealLogs, stats } = useAuth();
   const [coins, setCoins] = React.useState(2450);
   const [claimed, setClaimed] = React.useState<Record<number, string>>({});
 
@@ -31,10 +33,10 @@ export default function RewardsSubpage() {
   };
 
   const badges = [
-    { name: 'Ancient Roots', desc: 'Log 10 Satvik meals', progress: 80, icon: Star, color: 'text-yellow-500', bg: 'bg-yellow-50', grad: 'from-yellow-400 to-orange-500' },
-    { name: 'Mandi Master', desc: 'Shop within budget 5 times', progress: 40, icon: TrendingUp, color: 'text-emerald-500', bg: 'bg-emerald-50', grad: 'from-emerald-500 to-teal-600' },
-    { name: 'Health Warrior', desc: 'Keep a 12-day streak', progress: 100, icon: Zap, color: 'text-orange-500', bg: 'bg-orange-50', grad: 'from-orange-500 to-red-500' },
-    { name: 'Thali Pro', desc: 'Scan 50 diverse dishes', progress: 65, icon: Award, color: 'text-indigo-500', bg: 'bg-indigo-50', grad: 'from-indigo-600 to-purple-600' },
+    { name: 'Ancient Roots', desc: 'Log 10 Satvik meals', progress: Math.min(100, (mealLogs.length / 10) * 100), icon: Star, color: 'text-yellow-500', bg: 'bg-yellow-50', grad: 'from-yellow-400 to-orange-500' },
+    { name: 'Mandi Master', desc: 'Shop local 5 times', progress: Math.min(100, (stats.mandiMeals / 5) * 100), icon: TrendingUp, color: 'text-emerald-500', bg: 'bg-emerald-50', grad: 'from-emerald-500 to-teal-600' },
+    { name: 'Health Warrior', desc: 'Keep a streak active', progress: Math.min(100, (stats.streak / 30) * 100), icon: Zap, color: 'text-orange-500', bg: 'bg-orange-50', grad: 'from-orange-500 to-red-500' },
+    { name: 'Thali Pro', desc: 'Reach 80g protein', progress: Math.min(100, (stats.totalProtein / 80) * 100), icon: Award, color: 'text-indigo-500', bg: 'bg-indigo-50', grad: 'from-indigo-600 to-purple-600' },
   ];
 
   const coupons = [

@@ -22,7 +22,7 @@ import { FOOD_DATABASE, FoodItem } from '../../data/foodDatabase';
 import { cn } from '../../lib/utils';
 
 export default function HomeSubpage({ onNavigate }: { onNavigate: (id: string) => void }) {
-  const { profile, mealLogs, aarogyaScore, addMealLog } = useAuth();
+  const { profile, mealLogs, aarogyaScore, addMealLog, stats } = useAuth();
   const [isScanning, setIsScanning] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -44,11 +44,11 @@ export default function HomeSubpage({ onNavigate }: { onNavigate: (id: string) =
      setSearchQuery('');
   };
 
-  const stats = [
-    { label: 'CALORIES', val: 1450, target: 2100, icon: Zap, grad: 'from-orange-500 to-red-500', color: 'text-orange-500' },
-    { label: 'PROTEIN', val: 45, target: 80, icon: Target, grad: 'from-blue-500 to-indigo-600', color: 'text-indigo-500' },
-    { label: 'FIBRE', val: 18, target: 25, icon: TrendingUp, grad: 'from-emerald-500 to-teal-600', color: 'text-emerald-500' },
-    { label: 'WATER', val: 5, target: 8, icon: Droplets, grad: 'from-sky-400 to-blue-600', color: 'text-sky-500' },
+  const homeStats = [
+    { label: 'CALORIES', val: stats.totalCalories, target: profile?.calorie_target || 2100, icon: Zap, grad: 'from-orange-500 to-red-500', color: 'text-orange-500' },
+    { label: 'PROTEIN', val: stats.totalProtein, target: profile?.protein_target || 80, icon: Target, grad: 'from-blue-500 to-indigo-600', color: 'text-indigo-500' },
+    { label: 'FIBRE', val: stats.totalFibre, target: 25, icon: TrendingUp, grad: 'from-emerald-500 to-teal-600', color: 'text-emerald-500' },
+    { label: 'WATER', val: stats.waterIntake, target: 8, icon: Droplets, grad: 'from-sky-400 to-blue-600', color: 'text-sky-500' },
   ];
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -163,15 +163,17 @@ export default function HomeSubpage({ onNavigate }: { onNavigate: (id: string) =
               </div>
            </div>
            <div className="mt-8 space-y-2">
-              <div className="px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[0.6rem] font-black tracking-widest uppercase inline-block">GRADE: A+ OPTIMAL</div>
-              <p className="text-[0.65rem] text-gray-400 font-bold max-w-[180px] leading-relaxed">Your nutrient density is higher than 92% of users in your city.</p>
+              <div className="px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[0.6rem] font-black tracking-widest uppercase inline-block">
+                GRADE: {aarogyaScore > 85 ? 'A+ OPTIMAL' : aarogyaScore > 70 ? 'B+ GOOD' : 'C FAIR'}
+              </div>
+              <p className="text-[0.65rem] text-gray-400 font-bold max-w-[180px] leading-relaxed">Your nutrient density is higher than {Math.min(99, aarogyaScore + 10)}% of users in your city.</p>
            </div>
         </motion.div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, i) => (
+        {homeStats.map((stat, i) => (
           <motion.div 
             key={i}
             initial={{ opacity: 0, y: 20 }}

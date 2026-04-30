@@ -67,7 +67,22 @@ const MEAL_PLANS: Record<string, any[]> = {
 export default function MealPlanSubpage() {
   const { profile } = useAuth();
   const [activeDay, setActiveDay] = useState("MON");
-  const meals = MEAL_PLANS[activeDay] || [];
+  
+  const rawMeals = MEAL_PLANS[activeDay] || [];
+  
+  // Dynamic calculation based on goal
+  const meals = rawMeals.map(m => {
+    let multiplier = 1;
+    if (profile?.health_goal === 'GAIN MUSCLE') multiplier = 1.25;
+    if (profile?.health_goal === 'LOSE WEIGHT') multiplier = 0.85;
+    
+    return {
+      ...m,
+      kcal: Math.round(m.kcal * multiplier),
+      prot: Math.round(m.prot * multiplier),
+      cost: Math.round(m.cost * (multiplier > 1 ? 1.1 : 0.9))
+    };
+  });
 
   const totalCals = meals.reduce((acc, m) => acc + m.kcal, 0);
   const totalProt = meals.reduce((acc, m) => acc + m.prot, 0);

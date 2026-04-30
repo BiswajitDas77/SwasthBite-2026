@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
 import { auth, db } from '../lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 interface AuthContextType {
   user: User | null;
@@ -13,6 +13,19 @@ interface AuthContextType {
   mealLogs: any[];
   addMealLog: (meal: any) => Promise<void>;
   aarogyaScore: number;
+  recommendations: string[];
+  stats: {
+    streak: number;
+    co2Saved: number;
+    mandiMeals: number;
+    totalProtein: number;
+    totalCalories: number;
+    totalFibre: number;
+    varietyScore: number;
+    waterIntake: number;
+    micronutrients: number;
+  };
+  addWater: (amount: number) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -24,22 +37,52 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [mealLogs, setMealLogs] = useState<any[]>([]);
   const [aarogyaScore, setAarogyaScore] = useState(82);
   const [recommendations, setRecommendations] = useState<string[]>([]);
+  const [stats, setStats] = useState({
+    streak: 12,
+    co2Saved: 0,
+    mandiMeals: 0,
+    totalProtein: 0,
+    totalCalories: 0,
+    totalFibre: 0,
+    varietyScore: 0,
+    waterIntake: 5,
+    micronutrients: 70
+  });
 
-  // Load guest data from localStorage on mount
   useEffect(() => {
-    if (user?.uid === 'guest-user') {
-      const savedLogs = localStorage.getItem('guest_meal_logs');
-      if (savedLogs) {
-        const parsed = JSON.parse(savedLogs);
-        setMealLogs(parsed);
-        calculateScore(parsed);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+      
+      if (currentUser) {
+        // Load user profile from Firestore
+        const docRef = doc(db, 'users', currentUser.uid);
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+          setProfile(docSnap.data());
+        } else if (!profile) {
+          // If no profile exists yet, it will be created during onboarding
+          setProfile(null);
+        }
+
+        // Load meal logs from Firestore
+        const logsRef = doc(db, 'meal_logs', currentUser.uid);
+        const logsSnap = await getDoc(logsRef);
+        if (logsSnap.exists()) {
+          const logs = logsSnap.data().logs || [];
+          setMealLogs(logs);
+          calculateScore(logs);
+        }
+      } else {
+        // Handle guest user state if needed, or clear data
+        setProfile(null);
+        setMealLogs([]);
       }
-      const savedProfile = localStorage.getItem('guest_profile');
-      if (savedProfile) {
-        setProfile(JSON.parse(savedProfile));
-      }
-    }
-  }, [user]);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const calculateScore = (logs: any[]) => {
     if (logs.length === 0) {
@@ -50,9 +93,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const proteinTotal = logs.reduce((acc, log) => acc + (log.protein_g || 0), 0);
     const fibreTotal = logs.reduce((acc, log) => acc + (log.fibre_g || 0), 0);
     const caloriesTotal = logs.reduce((acc, log) => acc + (log.calories_kcal || 0), 0);
+    const uniqueFoods = new Set(logs.map(l => l.name_en || l.name)).size;
     
     const newScore = Math.min(100, 70 + (proteinTotal / 2) + (logs.length * 2));
     setAarogyaScore(Math.round(newScore));
+
+    // Calculate Dynamic Stats
+    setStats(prev => ({
+      ...prev,
+      co2Saved: logs.length * 1.2,
+      mandiMeals: logs.length,
+      totalProtein: proteinTotal,
+      totalCalories: caloriesTotal,
+      totalFibre: fibreTotal,
+      varietyScore: Math.min(10, uniqueFoods),
+      micronutrients: Math.min(100, 60 + (uniqueFoods * 5))
+    }));
 
     // Generate dynamic simple English recommendations
     const recs = [];
@@ -75,16 +131,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setMealLogs(updatedLogs);
     calculateScore(updatedLogs);
     
-    if (user?.uid === 'guest-user') {
-      localStorage.setItem('guest_meal_logs', JSON.stringify(updatedLogs));
+    if (user) {
+      if (user.uid === 'guest-user') {
+        localStorage.setItem('guest_meal_logs', JSON.stringify(updatedLogs));
+      } else {
+        await setDoc(doc(db, 'meal_logs', user.uid), { logs: updatedLogs }, { merge: true });
+      }
     }
   };
 
   const refreshProfile = async (newProfile?: any) => {
     if (newProfile) {
       setProfile(newProfile);
-      if (user?.uid === 'guest-user') {
-        localStorage.setItem('guest_profile', JSON.stringify(newProfile));
+      if (user) {
+        if (user.uid === 'guest-user') {
+          localStorage.setItem('guest_profile', JSON.stringify(newProfile));
+        } else {
+          await setDoc(doc(db, 'users', user.uid), newProfile, { merge: true });
+        }
       }
       return;
     }
@@ -115,37 +179,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  useEffect(() => {
-    // Bypassing real auth check on mount
-    setLoading(false);
-  }, []);
+  // Removed static useEffect for loading state as it's now handled by onAuthStateChanged
 
   const signIn = async () => {
     try {
       setLoading(true);
-      console.log('Logging in as Guest...');
-      // Simulate network delay
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      const mockUser = {
-        uid: 'guest-user',
-        email: 'guest@swasthbite.com',
-        displayName: 'Guest User',
-      } as User;
-      
-      setUser(mockUser);
-      
-      // Clear previous guest session to force a fresh onboarding/demo experience
-      localStorage.removeItem('guest_profile');
-      localStorage.removeItem('guest_meal_logs');
-      
-      setProfile(null); 
-      setMealLogs([]);
-      setAarogyaScore(82);
-      
-      console.log('Guest login success - Session cleared for fresh onboarding');
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+      // Logic for fetching profile is handled in onAuthStateChanged
     } catch (error) {
-      console.error('Sign in error:', error);
+      console.error('Google Sign-In Error:', error);
     } finally {
       setLoading(false);
     }
@@ -159,6 +202,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setAarogyaScore(82);
   };
 
+  const addWater = (amount: number) => {
+    setStats(prev => ({ ...prev, waterIntake: prev.waterIntake + amount }));
+  };
+
   return (
     <AuthContext.Provider value={{ 
         user, 
@@ -170,7 +217,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         mealLogs,
         addMealLog,
         aarogyaScore,
-        recommendations
+        recommendations,
+        stats,
+        addWater
       }}>
       {children}
     </AuthContext.Provider>
