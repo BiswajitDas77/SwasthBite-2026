@@ -1,45 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Apple, Flame, Utensils, Clock } from 'lucide-react';
+import { Apple, Flame, Utensils, Clock, Sparkles } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export default function RecommendationsSubpage() {
-  const { profile } = useAuth();
+  const { profile, stickyNotes, removeStickyNote } = useAuth();
   const [activeTab, setActiveTab] = useState<'diet' | 'workout'>('diet');
   const [workoutCategory, setWorkoutCategory] = useState<'yoga' | 'gym' | 'cardio'>('yoga');
-
-  const meals = [
-    {
-      time: "Breakfast",
-      name: "Protein-Packed Poha & Sprouts",
-      calories: "320 kcal",
-      carbs: "45g",
-      protein: "15g",
-      fat: "8g",
-      desc: "Light and highly nutritious start to your day. Sprouts add essential amino acids.",
-      image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      time: "Lunch",
-      name: "Multigrain Roti with Palak Paneer",
-      calories: "450 kcal",
-      carbs: "50g",
-      protein: "22g",
-      fat: "16g",
-      desc: "Iron-rich spinach combined with paneer for a heavy protein boost.",
-      image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      time: "Dinner",
-      name: "Light Quinoa Khichdi",
-      calories: "280 kcal",
-      carbs: "40g",
-      protein: "10g",
-      fat: "5g",
-      desc: "Easy to digest, perfect for maintaining steady glucose levels overnight.",
-      image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-    }
-  ];
 
   const workouts = {
     yoga: [
@@ -80,12 +47,48 @@ export default function RecommendationsSubpage() {
     ]
   };
 
+  const meals = [
+    {
+      time: "Breakfast",
+      name: "Protein-Packed Poha & Sprouts",
+      calories: "320 kcal",
+      carbs: "45g",
+      protein: "15g",
+      fat: "8g",
+      desc: "Light and highly nutritious start to your day. Sprouts add essential amino acids.",
+      insight: "Sprouts give you strength for your morning without making you feel heavy.",
+      image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      time: "Lunch",
+      name: "Multigrain Roti with Palak Paneer",
+      calories: "450 kcal",
+      carbs: "50g",
+      protein: "22g",
+      fat: "16g",
+      desc: "Spinach and paneer to give you a big protein boost at noon.",
+      insight: "Lunch is the best time for a big meal to keep your energy high.",
+      image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      time: "Dinner",
+      name: "Light Quinoa Khichdi",
+      calories: "280 kcal",
+      carbs: "40g",
+      protein: "10g",
+      fat: "5g",
+      desc: "Easy to digest, perfect for a good night's sleep.",
+      insight: "A light dinner helps your body rest and recover while you sleep.",
+      image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+    }
+  ];
+
   return (
     <div className="p-10 max-w-6xl mx-auto pb-32">
       <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
         <div>
-          <h1 className="text-4xl font-black mb-2 dark:text-white transition-colors">Personalized Recommendations</h1>
-          <p className="text-gray-500 dark:text-gray-400">Curated by Swastha AI specifically for your body type and goals.</p>
+          <h1 className="text-4xl font-black mb-2 dark:text-white transition-colors">Your Food Plan</h1>
+          <p className="text-gray-500 dark:text-gray-400">Simple tips to help you eat better every day.</p>
         </div>
         
         {/* Toggle Switch */}
@@ -96,7 +99,7 @@ export default function RecommendationsSubpage() {
               activeTab === 'diet' ? 'bg-white shadow-md text-[#3a6e00]' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'
             }`}
           >
-            Diet Plan
+            Daily Food
           </button>
           <button
             onClick={() => setActiveTab('workout')}
@@ -104,7 +107,7 @@ export default function RecommendationsSubpage() {
               activeTab === 'workout' ? 'bg-white shadow-md text-red-600' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'
             }`}
           >
-            Workout Plan
+            Easy Exercise
           </button>
         </div>
       </div>
@@ -118,74 +121,159 @@ export default function RecommendationsSubpage() {
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.2 }}
           >
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-              <div className="bg-white dark:bg-[#1a1c23] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-4 transition-colors">
-                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-2xl flex items-center justify-center text-[#3a6e00] dark:text-green-400">
-                  <Flame size={24} />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500 font-bold">Daily Target</p>
-                  <p className="text-xl font-black dark:text-white">1,850 kcal</p>
-                </div>
+            {/* 3D STICKY NOTES AREA */}
+            {stickyNotes && stickyNotes.length > 0 && (
+              <div className="flex flex-wrap gap-8 mb-16 px-4">
+                {stickyNotes.map((note, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ scale: 0, rotate: -10 }}
+                    animate={{ scale: 1, rotate: (i % 2 === 0 ? 3 : -3) }}
+                    whileHover={{ scale: 1.05, rotate: 0, zIndex: 50 }}
+                    className="relative w-64 h-64 p-8 bg-gradient-to-br from-yellow-100 to-yellow-200 shadow-xl border-t border-white/40 flex flex-col justify-between group transition-all cursor-default"
+                    style={{ 
+                      boxShadow: '10px 10px 25px rgba(0,0,0,0.1)',
+                      transformStyle: 'preserve-3d'
+                    }}
+                  >
+                    {/* Tape Effect */}
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-24 h-8 bg-white/30 backdrop-blur-sm border border-white/20 rotate-1 shadow-sm" />
+                    
+                    <p className="text-gray-800 font-bold text-sm leading-relaxed italic">
+                       "{note}"
+                    </p>
+                    
+                    <div className="flex justify-between items-center mt-4">
+                       <span className="text-[0.6rem] font-black uppercase tracking-widest text-yellow-700/50">Dr. Note</span>
+                       <button 
+                         onClick={() => removeStickyNote(i)}
+                         className="w-6 h-6 rounded-full bg-black/5 flex items-center justify-center text-xs hover:bg-red-500 hover:text-white transition-colors"
+                       >
+                         ✕
+                       </button>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
-              <div className="bg-white dark:bg-[#1a1c23] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-4 transition-colors">
-                <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-2xl flex items-center justify-center text-orange-600 dark:text-orange-400">
-                  <Utensils size={24} />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500 font-bold">Protein Goal</p>
-                  <p className="text-xl font-black dark:text-white">85g</p>
-                </div>
-              </div>
-              <div className="bg-white dark:bg-[#1a1c23] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-4 transition-colors">
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400">
-                  <Apple size={24} />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500 font-bold">Diet Type</p>
-                  <p className="text-xl font-black capitalize dark:text-white">{profile?.health_goal || 'Stay Fit'}</p>
-                </div>
-              </div>
+            )}
+
+            {/* SIMPLE ANALYSIS CARD */}
+            <div className="bg-white/40 backdrop-blur-xl rounded-[40px] p-10 border border-white/20 shadow-2xl shadow-green-100/20 mb-12 relative overflow-hidden black-glow-card">
+               <div className="max-w-2xl">
+                  <div className="inline-block px-4 py-1 bg-green-100 text-green-700 rounded-full text-[0.65rem] font-black uppercase tracking-widest mb-6">
+                    Food Helper
+                  </div>
+                  <h2 className="text-3xl font-black mb-6 dark:text-white">Health Check</h2>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
+                    You're doing a good job! Your health score is <span className="font-bold text-black dark:text-white">82</span>. 
+                    To get even better, try to eat a bit more protein to reach your goal.
+                  </p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="flex gap-4">
+                       <div className="w-1.5 h-12 bg-green-500 rounded-full" />
+                       <div>
+                          <p className="text-xs font-black text-gray-400 uppercase">Top Tip</p>
+                          <p className="font-bold text-sm">Eat more sprouts for strength.</p>
+                       </div>
+                    </div>
+                    <div className="flex gap-4">
+                       <div className="w-1.5 h-12 bg-blue-500 rounded-full" />
+                       <div>
+                          <p className="text-xs font-black text-gray-400 uppercase">Best Time</p>
+                          <p className="font-bold text-sm">Have a big lunch at 1 PM.</p>
+                       </div>
+                    </div>
+                    <div className="flex gap-4">
+                       <div className="w-1.5 h-12 bg-orange-500 rounded-full" />
+                       <div>
+                          <p className="text-xs font-black text-gray-400 uppercase">Local Choice</p>
+                          <p className="font-bold text-sm">Use fresh local cooking oils.</p>
+                       </div>
+                    </div>
+                  </div>
+               </div>
             </div>
 
-            <div className="space-y-6">
-              {meals.filter(m => {
-                if (profile?.health_goal === 'GAIN MUSCLE') return m.protein.includes('g') && parseInt(m.protein) > 15;
-                if (profile?.health_goal === 'LOSE WEIGHT') return parseInt(m.calories) < 350;
-                return true;
-              }).map((meal, idx) => (
-                <div key={idx} className="bg-white dark:bg-[#1a1c23] rounded-[32px] p-6 shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col md:flex-row gap-8 transition-colors">
+            <h2 className="text-xs font-black text-gray-400 uppercase tracking-[0.3em] mb-8">Your Meals for Today</h2>
+            <div className="space-y-6 mb-16">
+              {meals.map((meal, idx) => (
+                <div key={idx} className="bg-white dark:bg-[#1a1c23] rounded-[32px] p-6 shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col md:flex-row gap-8 transition-colors hover:border-green-100 group transition-all duration-300">
                   <div className="w-full md:w-64 h-48 rounded-2xl overflow-hidden shrink-0">
-                    <img src={meal.image} alt={meal.name} className="w-full h-full object-cover" />
+                    <img src={meal.image} alt={meal.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
                   <div className="flex-1 py-2">
-                    <div className="inline-block px-4 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-xs font-bold uppercase tracking-wider mb-4 transition-colors">
-                      {meal.time}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="inline-block px-4 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-[0.6rem] font-black uppercase tracking-wider transition-colors">
+                        {meal.time}
+                      </div>
+                      <div className="text-xs font-bold text-green-600 flex items-center gap-1 bg-green-50 px-3 py-1 rounded-full">
+                         Good Choice
+                      </div>
                     </div>
                     <h3 className="text-2xl font-black mb-2 dark:text-white transition-colors">{meal.name}</h3>
-                    <p className="text-gray-500 dark:text-gray-400 mb-6">{meal.desc}</p>
+                    <p className="text-gray-500 dark:text-gray-400 mb-6 text-sm leading-relaxed">{meal.desc}</p>
                     
-                    <div className="flex flex-wrap gap-4 md:gap-6">
+                    <div className="bg-gray-50/50 dark:bg-gray-800/30 p-4 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700 mb-6">
+                        <p className="text-[0.6rem] font-black text-green-600 uppercase mb-2">Why this is good</p>
+                        <p className="text-xs italic text-gray-600 dark:text-gray-400 leading-relaxed">{meal.insight}</p>
+                    </div>
+
+                    <div className="grid grid-cols-4 gap-4">
                       <div>
-                        <p className="text-xs text-gray-400 font-bold uppercase">Calories</p>
-                        <p className="font-bold dark:text-white">{meal.calories}</p>
+                        <p className="text-[0.6rem] text-gray-400 font-black uppercase">Calories</p>
+                        <p className="font-bold text-sm dark:text-white">{meal.calories}</p>
                       </div>
                       <div>
-                        <p className="text-xs text-gray-400 font-bold uppercase">Carbs</p>
-                        <p className="font-bold dark:text-white">{meal.carbs}</p>
+                        <p className="text-[0.6rem] text-gray-400 font-black uppercase">Carbs</p>
+                        <p className="font-bold text-sm dark:text-white">{meal.carbs}</p>
                       </div>
                       <div>
-                        <p className="text-xs text-gray-400 font-bold uppercase">Protein</p>
-                        <p className="font-bold dark:text-white">{meal.protein}</p>
+                        <p className="text-[0.6rem] text-gray-400 font-black uppercase">Protein</p>
+                        <p className="font-bold text-sm dark:text-white">{meal.protein}</p>
                       </div>
                       <div>
-                        <p className="text-xs text-gray-400 font-bold uppercase">Fat</p>
-                        <p className="font-bold dark:text-white">{meal.fat}</p>
+                        <p className="text-[0.6rem] text-gray-400 font-black uppercase">Fat</p>
+                        <p className="font-bold text-sm dark:text-white">{meal.fat}</p>
                       </div>
                     </div>
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* DAILY HABITS */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+               <div className="p-8 bg-gray-50 dark:bg-gray-800/50 rounded-[40px] border border-gray-100 dark:border-gray-700">
+                  <h3 className="text-lg font-black mb-6 uppercase tracking-wider">Daily Habits</h3>
+                  <ul className="space-y-4">
+                     <li className="flex items-start gap-4">
+                        <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 mt-1">
+                           <span className="text-[10px] font-black">01</span>
+                        </div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400"><span className="font-bold text-black dark:text-white">Water:</span> Drink warm water in the morning to clean your stomach.</p>
+                     </li>
+                     <li className="flex items-start gap-4">
+                        <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 mt-1">
+                           <span className="text-[10px] font-black">02</span>
+                        </div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400"><span className="font-bold text-black dark:text-white">Chewing:</span> Chew your food slowly. It helps you digest better.</p>
+                     </li>
+                  </ul>
+               </div>
+               <div className="p-8 bg-gray-50 dark:bg-gray-800/50 rounded-[40px] border border-gray-100 dark:border-gray-700">
+                  <h3 className="text-lg font-black mb-6 uppercase tracking-wider">Things to Avoid</h3>
+                  <ul className="space-y-4">
+                     <li className="flex items-start gap-4">
+                        <div className="w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0 mt-1 text-[10px]">✕</div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Don't drink very cold water while eating.</p>
+                     </li>
+                     <li className="flex items-start gap-4">
+                        <div className="w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0 mt-1 text-[10px]">✕</div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Don't use your phone while eating. Focus on your food.</p>
+                     </li>
+                  </ul>
+               </div>
             </div>
           </motion.div>
         )}
@@ -198,57 +286,56 @@ export default function RecommendationsSubpage() {
             exit={{ opacity: 0, x: 20 }}
             transition={{ duration: 0.2 }}
           >
-            {/* Workout Category Tabs */}
-            <div className="flex overflow-x-auto hide-scrollbar gap-4 mb-8 pb-2">
-              {(['yoga', 'gym', 'cardio'] as const).map(category => (
-                <button
-                  key={category}
-                  onClick={() => setWorkoutCategory(category)}
-                  className={`px-6 py-2 rounded-xl font-bold text-sm capitalize transition-all ${
-                    workoutCategory === category
-                      ? 'bg-red-500 text-white shadow-lg shadow-red-200'
-                      : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
-                  }`}
-                >
-                  {category} Workouts
-                </button>
-              ))}
-            </div>
+             {/* Workout Tabs */}
+             <div className="flex gap-4 mb-12">
+               {['yoga', 'gym', 'cardio'].map((cat) => (
+                 <button
+                   key={cat}
+                   onClick={() => setWorkoutCategory(cat as any)}
+                   className={`px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all ${
+                     workoutCategory === cat 
+                      ? 'bg-black text-white shadow-lg' 
+                      : 'bg-white text-gray-400 border border-gray-100 hover:border-gray-200'
+                   }`}
+                 >
+                   {cat}
+                 </button>
+               ))}
+             </div>
 
-            <div className="space-y-10">
-              {workouts[workoutCategory].map((workout, idx) => (
-                <div key={idx} className="bg-white dark:bg-[#1a1c23] rounded-[40px] overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col md:flex-row transition-colors">
-                  <div className="w-full md:w-1/2 h-[300px] bg-black">
-                    <iframe 
-                      className="w-full h-full pointer-events-auto"
-                      src={`https://www.youtube-nocookie.com/embed/${workout.embedId}?modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&fs=0`}
-                      title={workout.title}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    ></iframe>
-                  </div>
-                  
-                  <div className="p-8 md:w-1/2 flex flex-col justify-center">
-                    <h3 className="text-3xl font-black mb-4 dark:text-white transition-colors">{workout.title}</h3>
-                    <div className="flex gap-6 text-sm text-gray-500 dark:text-gray-400 font-bold mb-8 transition-colors">
-                      <span className="flex items-center gap-2"><Clock size={16} className="text-red-500" /> {workout.duration}</span>
-                      <span className="flex items-center gap-2"><Flame size={16} className="text-orange-500" /> {workout.calories}</span>
-                    </div>
-
-                    <div className="bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-6 transition-colors">
-                      <h4 className="font-bold text-gray-400 uppercase tracking-wider text-xs mb-4">Exercises Included</h4>
-                      <div className="flex flex-wrap gap-3">
-                        {workout.exercises.map((ex, i) => (
-                          <span key={i} className="bg-white dark:bg-gray-800 px-4 py-2 rounded-xl text-sm font-bold border border-gray-100 dark:border-gray-700 shadow-sm text-gray-700 dark:text-gray-300 transition-colors">
-                            {ex}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {workouts[workoutCategory].map((w, i) => (
+                  <motion.div 
+                    key={i}
+                    whileHover={{ y: -5 }}
+                    className="bg-white dark:bg-[#1a1c23] rounded-[32px] overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 transition-colors"
+                  >
+                     <div className="aspect-video w-full bg-gray-100">
+                        <iframe
+                          width="100%"
+                          height="100%"
+                          src={`https://www.youtube.com/embed/${w.embedId}`}
+                          title={w.title}
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        ></iframe>
+                     </div>
+                     <div className="p-6">
+                        <div className="flex items-center gap-2 mb-3">
+                           <Clock size={14} className="text-gray-400" />
+                           <span className="text-[0.6rem] font-black text-gray-400 uppercase tracking-widest">{w.duration} • {w.calories}</span>
+                        </div>
+                        <h4 className="text-xl font-black mb-4 dark:text-white">{w.title}</h4>
+                        <div className="flex flex-wrap gap-2">
+                           {w.exercises.map((ex, j) => (
+                             <span key={j} className="px-3 py-1 bg-gray-50 dark:bg-gray-800 text-[0.6rem] font-bold text-gray-500 rounded-lg">{ex}</span>
+                           ))}
+                        </div>
+                     </div>
+                  </motion.div>
+                ))}
+             </div>
           </motion.div>
         )}
       </AnimatePresence>

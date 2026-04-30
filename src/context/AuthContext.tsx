@@ -26,6 +26,9 @@ interface AuthContextType {
     micronutrients: number;
   };
   addWater: (amount: number) => void;
+  stickyNotes: string[];
+  addStickyNotes: (notes: string[]) => void;
+  removeStickyNote: (index: number) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -37,6 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [mealLogs, setMealLogs] = useState<any[]>([]);
   const [aarogyaScore, setAarogyaScore] = useState(82);
   const [recommendations, setRecommendations] = useState<string[]>([]);
+  const [stickyNotes, setStickyNotes] = useState<string[]>([]);
   const [stats, setStats] = useState({
     streak: 12,
     co2Saved: 0,
@@ -60,8 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         
         if (docSnap.exists()) {
           setProfile(docSnap.data());
-        } else if (!profile) {
-          // If no profile exists yet, it will be created during onboarding
+        } else {
           setProfile(null);
         }
 
@@ -74,7 +77,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           calculateScore(logs);
         }
       } else {
-        // Handle guest user state if needed, or clear data
         setProfile(null);
         setMealLogs([]);
       }
@@ -89,7 +91,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setAarogyaScore(82); // Default
       return;
     }
-    // Simple logic: higher variety and more protein adequacy increases score
     const proteinTotal = logs.reduce((acc, log) => acc + (log.protein_g || 0), 0);
     const fibreTotal = logs.reduce((acc, log) => acc + (log.fibre_g || 0), 0);
     const caloriesTotal = logs.reduce((acc, log) => acc + (log.calories_kcal || 0), 0);
@@ -98,7 +99,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const newScore = Math.min(100, 70 + (proteinTotal / 2) + (logs.length * 2));
     setAarogyaScore(Math.round(newScore));
 
-    // Calculate Dynamic Stats
     setStats(prev => ({
       ...prev,
       co2Saved: logs.length * 1.2,
@@ -110,7 +110,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       micronutrients: Math.min(100, 60 + (uniqueFoods * 5))
     }));
 
-    // Generate dynamic simple English recommendations
     const recs = [];
     if (proteinTotal < 50) recs.push("Eat more Dal or Paneer to help your muscles grow.");
     if (fibreTotal < 15) recs.push("Add some Green Salad to your next meal for better digestion.");
@@ -132,11 +131,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     calculateScore(updatedLogs);
     
     if (user) {
-      if (user.uid === 'guest-user') {
-        localStorage.setItem('guest_meal_logs', JSON.stringify(updatedLogs));
-      } else {
-        await setDoc(doc(db, 'meal_logs', user.uid), { logs: updatedLogs }, { merge: true });
-      }
+      await setDoc(doc(db, 'meal_logs', user.uid), { logs: updatedLogs }, { merge: true });
     }
   };
 
@@ -144,49 +139,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (newProfile) {
       setProfile(newProfile);
       if (user) {
-        if (user.uid === 'guest-user') {
-          localStorage.setItem('guest_profile', JSON.stringify(newProfile));
-        } else {
-          await setDoc(doc(db, 'users', user.uid), newProfile, { merge: true });
-        }
+        await setDoc(doc(db, 'users', user.uid), newProfile, { merge: true });
       }
       return;
     }
-
-    if (user && user.uid === 'guest-user') {
-       const saved = localStorage.getItem('guest_profile');
-       if (saved) {
-         setProfile(JSON.parse(saved));
-       } else {
-         setProfile({
-           name: 'Guest User',
-           age: 30,
-           gender: 'other',
-           region: 'North India',
-           preferences: ['Vegetarian'],
-           budget_range: 'moderate',
-           health_goals: ['Maintain Weight'],
-           dietary_constraints: [],
-         });
-       }
-    }
   };
-
-  const updateProfile = async (newProfile: any) => {
-    setProfile(newProfile);
-    if (user?.uid === 'guest-user') {
-      localStorage.setItem('guest_profile', JSON.stringify(newProfile));
-    }
-  };
-
-  // Removed static useEffect for loading state as it's now handled by onAuthStateChanged
 
   const signIn = async () => {
     try {
       setLoading(true);
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
-      // Logic for fetching profile is handled in onAuthStateChanged
     } catch (error) {
       console.error('Google Sign-In Error:', error);
     } finally {
@@ -206,6 +169,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setStats(prev => ({ ...prev, waterIntake: prev.waterIntake + amount }));
   };
 
+  const addStickyNotes = (notes: string[]) => {
+    setStickyNotes(prev => [...prev, ...notes]);
+  };
+
+  const removeStickyNote = (index: number) => {
+    setStickyNotes(prev => prev.filter((_, i) => i !== index));
+  };
+
   return (
     <AuthContext.Provider value={{ 
         user, 
@@ -219,17 +190,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         aarogyaScore,
         recommendations,
         stats,
-        addWater
+        addWater,
+        stickyNotes,
+        addStickyNotes,
+        removeStickyNote
       }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-export function useAuth() {
+export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-}
+};

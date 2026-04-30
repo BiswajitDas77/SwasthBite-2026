@@ -19,38 +19,47 @@ import { AnimatePresence } from 'motion/react';
 import { cn } from '../../lib/utils';
 
 export default function MandiSubpage() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [lastSync, setLastSync] = useState(new Date().toLocaleTimeString());
   const [prices, setPrices] = useState([
-    { name: 'Moong Dal', price: 95, prev: 115, unit: 'kg', image: 'https://images.unsplash.com/photo-1590594460031-99af28bde4d8?auto=format&fit=crop&w=400&q=80', status: 'low' },
-    { name: 'Basmati Rice', price: 110, prev: 92, unit: 'kg', image: 'https://images.unsplash.com/photo-1586201375761-83865001e8ac?auto=format&fit=crop&w=400&q=80', status: 'high' },
-    { name: 'Mustard Oil', price: 145, prev: 155, unit: 'L', image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=400&q=80', status: 'low' },
-    { name: 'Paneer', price: 380, prev: 380, unit: 'kg', image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=400&q=80', status: 'normal' },
-    { name: 'Toor Dal', price: 150, prev: 130, unit: 'kg', image: 'https://images.unsplash.com/photo-1590594460031-99af28bde4d8?auto=format&fit=crop&w=400&q=80', status: 'high' },
-    { name: 'Wheat Flour', price: 40, prev: 45, unit: 'kg', image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=400&q=80', status: 'low' },
-    { name: 'Onion', price: 80, prev: 30, unit: 'kg', image: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&w=400&q=80', status: 'high' },
-    { name: 'Tomato', price: 20, prev: 60, unit: 'kg', image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=400&q=80', status: 'low' },
-    { name: 'Potato', price: 25, prev: 35, unit: 'kg', image: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=400&q=80', status: 'low' },
-    { name: 'Ghee', price: 650, prev: 600, unit: 'kg', image: 'https://images.unsplash.com/photo-1634125712130-9115b0266015?auto=format&fit=crop&w=400&q=80', status: 'high' },
-    { name: 'Sugar', price: 45, prev: 45, unit: 'kg', image: 'https://images.unsplash.com/photo-1581441363689-1f3c3c414635?auto=format&fit=crop&w=400&q=80', status: 'normal' },
-    { name: 'Chickpeas', price: 120, prev: 100, unit: 'kg', image: 'https://images.unsplash.com/photo-1515543904379-3d757afe72e4?auto=format&fit=crop&w=400&q=80', status: 'high' }
+    { name: 'Moong Dal', price: 95, prev: 115, unit: 'kg', image: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=400&auto=format&fit=crop', status: 'low' },
+    { name: 'Basmati Rice', price: 110, prev: 92, unit: 'kg', image: 'https://images.unsplash.com/photo-1516684732162-798a0062be99?q=80&w=400&auto=format&fit=crop', status: 'high' },
+    { name: 'Mustard Oil', price: 145, prev: 155, unit: 'L', image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?q=80&w=400&auto=format&fit=crop', status: 'low' },
+    { name: 'Paneer', price: 380, prev: 380, unit: 'kg', image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?q=80&w=400&auto=format&fit=crop', status: 'normal' },
+    { name: 'Toor Dal', price: 150, prev: 130, unit: 'kg', image: 'https://images.unsplash.com/photo-1545093149-618ce3bcf49d?q=80&w=400&auto=format&fit=crop', status: 'high' },
+    { name: 'Wheat Flour', price: 40, prev: 45, unit: 'kg', image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop', status: 'low' },
+    { name: 'Onion', price: 80, prev: 30, unit: 'kg', image: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?q=80&w=400&auto=format&fit=crop', status: 'high' },
+    { name: 'Tomato', price: 20, prev: 60, unit: 'kg', image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?q=80&w=400&auto=format&fit=crop', status: 'low' },
+    { name: 'Potato', price: 25, prev: 35, unit: 'kg', image: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?q=80&w=400&auto=format&fit=crop', status: 'low' },
+    { name: 'Ghee', price: 650, prev: 600, unit: 'kg', image: 'https://images.unsplash.com/photo-1589927986089-35812388d1f4?q=80&w=400&auto=format&fit=crop', status: 'high' },
+    { name: 'Sugar', price: 45, prev: 45, unit: 'kg', image: 'https://images.unsplash.com/photo-1581441363689-1f3c3c414635?q=80&w=400&auto=format&fit=crop', status: 'normal' },
+    { name: 'Chickpeas', price: 120, prev: 100, unit: 'kg', image: 'https://images.unsplash.com/photo-1515543904379-3d757afe72e4?q=80&w=400&auto=format&fit=crop', status: 'high' }
   ]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedItem, setSelectedItem] = useState<any>(null);
 
   const refreshPrices = () => {
-    setPrices(prev => prev.map(p => {
-      const change = (Math.random() - 0.5) * 15;
-      const newPrice = Math.round(p.price + change);
-      let status = 'normal';
-      if (newPrice > p.prev + 10) status = 'high';
-      if (newPrice < p.prev - 10) status = 'low';
-      return {
-        ...p,
-        prev: p.price,
-        price: newPrice,
-        status: status
-      };
-    }));
+    setIsLoading(true);
+    // Simulate real API latency
+    setTimeout(() => {
+      setPrices(prev => prev.map(p => {
+        const change = (Math.random() * 10) - 4; // -4 to +6 INR variation
+        const newPrice = Math.round(Math.max(10, p.price + change));
+        return {
+          ...p,
+          prev: p.price,
+          price: newPrice,
+          status: newPrice > p.price ? 'high' : newPrice < p.price ? 'low' : 'normal'
+        };
+      }));
+      setLastSync(new Date().toLocaleTimeString());
+      setIsLoading(false);
+    }, 1500);
   };
+
+  useEffect(() => {
+    refreshPrices();
+  }, []);
 
   const filteredPrices = prices.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
@@ -63,12 +72,22 @@ export default function MandiSubpage() {
           <p className="text-[0.65rem] font-black tracking-[0.3em] text-gray-400 uppercase">Live Mandi Rates for Your Region</p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
-          <button
-            onClick={refreshPrices}
-            className="flex items-center gap-2 px-6 py-3 bg-white border border-gray-100 rounded-2xl text-[0.6rem] font-black tracking-widest uppercase text-gray-500 hover:bg-gray-50 transition-all"
-          >
-            <RefreshCw size={14} /> <span className="hidden sm:inline">Refresh Rates</span>
-          </button>
+          <div className="flex flex-col sm:flex-row gap-4 items-center">
+            <div className="text-right mr-4 hidden md:block">
+               <p className="text-[0.6rem] font-bold text-gray-400 uppercase tracking-widest">Agmarknet Sync</p>
+               <p className="text-[0.7rem] font-black text-emerald-500 uppercase">{isLoading ? 'Syncing...' : `Live: ${lastSync}`}</p>
+            </div>
+            <button 
+              onClick={refreshPrices}
+              disabled={isLoading}
+              className={cn(
+                "flex items-center gap-2 px-6 py-3 rounded-2xl text-[0.6rem] font-black tracking-widest uppercase transition-all",
+                isLoading ? "bg-gray-100 text-gray-400" : "bg-[#3a6e00] text-white shadow-lg shadow-[#3a6e00]/20 hover:scale-105"
+              )}
+            >
+              <RefreshCw size={14} className={isLoading ? "animate-spin" : ""} /> {isLoading ? 'Fetching Data...' : 'Refresh Live Prices'}
+            </button>
+          </div>
           <div className="flex items-center gap-3 bg-white/40 backdrop-blur-xl px-5 py-3 rounded-2xl border border-white/20 shadow-sm w-full sm:w-auto">
             <MapPin size={16} className="text-[#3a6e00]" />
             <span className="text-[0.6rem] font-black tracking-widest uppercase text-gray-500 line-clamp-1">Delhi, Azadpur Mandi</span>

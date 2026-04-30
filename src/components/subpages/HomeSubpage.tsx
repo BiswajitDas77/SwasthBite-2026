@@ -128,7 +128,7 @@ export default function HomeSubpage({ onNavigate }: { onNavigate: (id: string) =
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           onClick={() => onNavigate('aarogya')}
-          className="col-span-1 lg:col-span-4 bg-white/40 backdrop-blur-xl rounded-[40px] p-8 border border-white/20 shadow-xl shadow-gray-200/20 flex flex-col items-center justify-center text-center relative overflow-hidden cursor-pointer group"
+          className="col-span-1 lg:col-span-4 bg-white/40 backdrop-blur-xl rounded-[40px] p-8 border border-white/20 shadow-xl shadow-gray-200/20 flex flex-col items-center justify-center text-center relative overflow-hidden cursor-pointer group black-glow-card"
         >
            <div className="relative w-48 h-48 flex items-center justify-center">
               <svg className="w-full h-full -rotate-90">
@@ -180,7 +180,7 @@ export default function HomeSubpage({ onNavigate }: { onNavigate: (id: string) =
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
             whileHover={{ y: -5 }}
-            className="bg-white/40 backdrop-blur-xl p-8 rounded-[32px] border border-white/20 shadow-xl shadow-gray-200/40 relative overflow-hidden group"
+            className="bg-white/40 backdrop-blur-xl p-8 rounded-[32px] border border-white/20 shadow-xl shadow-gray-200/40 relative overflow-hidden group black-glow-card"
           >
              <div className="flex items-center justify-between mb-6 relative z-10">
                 <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center bg-gray-50", stat.color)}>
@@ -215,7 +215,7 @@ export default function HomeSubpage({ onNavigate }: { onNavigate: (id: string) =
       {/* Main Content Area: Today's Logs vs Empty State */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="col-span-1 lg:col-span-8">
-          <div className="bg-white/40 backdrop-blur-xl rounded-[40px] border border-white/20 shadow-xl shadow-gray-200/20 overflow-hidden min-h-[400px] flex flex-col">
+          <div className="bg-white/40 backdrop-blur-xl rounded-[40px] border border-white/20 shadow-xl shadow-gray-200/20 overflow-hidden min-h-[400px] flex flex-col black-glow-card">
             <div className="p-8 border-b border-gray-50 flex justify-between items-center bg-gray-50/30">
               <div className="flex items-center gap-4">
                 <h3 className="text-[0.7rem] font-black tracking-[0.3em] uppercase text-gray-400 flex items-center gap-2">

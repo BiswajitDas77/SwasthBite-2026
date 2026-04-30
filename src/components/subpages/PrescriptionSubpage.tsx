@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FileText, 
   Upload, 
@@ -7,22 +7,34 @@ import {
   AlertCircle, 
   Plus, 
   ChevronRight,
-  ShieldCheck,
   Stethoscope,
-  Info
+  Info,
+  Check
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
+import { useAuth } from '../../context/AuthContext';
 
 export default function PrescriptionSubpage() {
+  const { addStickyNotes } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
   const [showResult, setShowResult] = useState(false);
+  const [isAdded, setIsAdded] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const mockInstructions = [
-    { text: "Increase protein intake for muscle recovery", type: "add" },
-    { text: "Reduce white salt in daily meals", type: "limit" },
-    { text: "Add more leafy greens (Palak/Saag)", type: "add" }
+    { text: "Eat more protein to help your body recover", type: "add" },
+    { text: "Use less salt in your food", type: "limit" },
+    { text: "Eat more green vegetables like Palak", type: "add" }
   ];
+
+  const handleAddNotes = () => {
+    addStickyNotes(mockInstructions.map(i => i.text));
+    setIsAdded(true);
+    setTimeout(() => {
+      setIsAdded(false);
+      setShowResult(false);
+    }, 2000);
+  };
 
   const handleUpload = () => {
     setIsUploading(true);
@@ -37,12 +49,8 @@ export default function PrescriptionSubpage() {
       {/* Header */}
       <div className="flex justify-between items-end">
         <div className="space-y-2">
-          <h2 className="font-display text-5xl uppercase tracking-tighter">Medical Sync</h2>
-          <p className="text-[0.65rem] font-black tracking-[0.3em] text-gray-400 uppercase">Connect Your Prescriptions to Your Diet</p>
-        </div>
-        <div className="flex items-center gap-3 bg-emerald-50 px-5 py-3 rounded-2xl border border-emerald-100 shadow-sm">
-          <ShieldCheck size={16} className="text-emerald-600" />
-          <span className="text-[0.65rem] font-black tracking-widest uppercase text-emerald-700">HIPAA Protected</span>
+          <h2 className="font-display text-5xl uppercase tracking-tighter">Doctor's Advice</h2>
+          <p className="text-[0.65rem] font-black tracking-[0.3em] text-gray-400 uppercase">Read what your doctor says about your food</p>
         </div>
       </div>
 
@@ -60,10 +68,10 @@ export default function PrescriptionSubpage() {
                 </div>
                 <div className="space-y-2">
                    <h3 className="text-2xl font-black tracking-tight text-gray-800">
-                     {isUploading ? 'Reading Doctor\'s Notes...' : 'Upload Prescription'}
+                     {isUploading ? 'Reading Notes...' : 'Add Doctor\'s Note'}
                    </h3>
                    <p className="text-xs text-gray-400 font-bold uppercase tracking-[0.2em] max-w-xs leading-relaxed">
-                     Our AI will extract dietary advice directly from your doctor's slip.
+                     We will find the food tips in your doctor's note for you.
                    </p>
                 </div>
                 <input type="file" ref={fileInputRef} className="hidden" onChange={handleUpload} />
@@ -76,11 +84,11 @@ export default function PrescriptionSubpage() {
              >
                 <div className="p-10 border-b border-white/10 bg-[#3a6e00]/5 flex items-center gap-4">
                    <div className="w-12 h-12 bg-[#3a6e00] text-white rounded-2xl flex items-center justify-center">
-                      <Stethoscope size={24} />
+                      <FileText size={24} />
                    </div>
                    <div>
-                      <p className="text-[0.6rem] font-black text-[#3a6e00] tracking-widest uppercase">Analysis Complete</p>
-                      <h4 className="text-lg font-black tracking-tight text-gray-800">Dietary Rules Extracted</h4>
+                      <p className="text-[0.6rem] font-black text-[#3a6e00] tracking-widest uppercase">Finished Reading</p>
+                      <h4 className="text-lg font-black tracking-tight text-gray-800">Food Tips Found</h4>
                    </div>
                 </div>
                 <div className="p-10 space-y-6">
@@ -96,10 +104,19 @@ export default function PrescriptionSubpage() {
                      </div>
                    ))}
                    <button 
-                     onClick={() => setShowResult(false)}
-                     className="w-full py-5 bg-[#3a6e00] text-white rounded-2xl font-black text-[0.65rem] tracking-[0.2em] uppercase shadow-xl shadow-[#3a6e00]/20"
+                     onClick={handleAddNotes}
+                     className={cn(
+                       "w-full py-5 rounded-2xl font-black text-[0.65rem] tracking-[0.2em] uppercase shadow-xl transition-all flex items-center justify-center gap-2",
+                       isAdded ? "bg-emerald-500 text-white shadow-emerald-500/20" : "bg-[#3a6e00] text-white shadow-[#3a6e00]/20"
+                     )}
                    >
-                      Apply To My Meal Plan
+                      {isAdded ? (
+                        <>
+                          <Check size={16} /> Added To Plan
+                        </>
+                      ) : (
+                        "Add To My Plan"
+                      )}
                    </button>
                 </div>
              </motion.div>
@@ -116,10 +133,10 @@ export default function PrescriptionSubpage() {
                  <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center">
                     <FileText size={24} className="text-indigo-400" />
                  </div>
-                 <h4 className="text-3xl font-display uppercase leading-tight">Digital <br /> Health Locker</h4>
-                 <p className="text-white/40 text-[0.6rem] font-bold uppercase tracking-widest leading-relaxed">Safe and secure storage for all your medical history. Our AI only reads nutritional notes to help your recovery.</p>
+                 <h4 className="text-3xl font-display uppercase leading-tight">Your Private <br /> Health Safe</h4>
+                 <p className="text-white/40 text-[0.6rem] font-bold uppercase tracking-widest leading-relaxed">A safe place for your health notes. We only read the food tips to help you eat better.</p>
                  <div className="flex -space-x-4">
-                    {[1,2,3].map(i => <div key={i} className="w-12 h-12 rounded-full border-4 border-[#0d0d14] bg-white/20 flex items-center justify-center text-[0.6rem] font-black tracking-widest">DR</div>)}
+                    {[1,2,3].map(i => <div key={i} className="w-12 h-12 rounded-full border-4 border-[#0d0d14] bg-white/20 flex items-center justify-center text-[0.6rem] font-black tracking-widest">SAFE</div>)}
                     <div className="w-12 h-12 rounded-full border-4 border-[#0d0d14] bg-indigo-600 flex items-center justify-center text-[0.6rem] font-black">+2</div>
                  </div>
               </div>
@@ -129,10 +146,10 @@ export default function PrescriptionSubpage() {
            <div className="bg-white/40 backdrop-blur-xl rounded-[40px] p-8 border border-white/20 shadow-xl shadow-gray-200/20">
               <div className="flex items-center gap-3 mb-6">
                  <Info size={16} className="text-[#3a6e00]" />
-                 <h4 className="text-[0.6rem] font-black tracking-widest uppercase text-gray-400">Why Sync?</h4>
+                 <h4 className="text-[0.6rem] font-black tracking-widest uppercase text-gray-400">Why Use This?</h4>
               </div>
               <p className="text-sm font-bold text-gray-800 leading-relaxed italic">
-                "Doctors often give dietary advice that's hard to follow. We turn those scribbles into clear rules for your Daily Thali."
+                "Doctors often give food tips that are hard to follow. We turn those notes into easy rules for your daily meals."
               </p>
            </div>
         </div>

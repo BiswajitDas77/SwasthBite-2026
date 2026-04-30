@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { cn } from '../../lib/utils';
+import { GlowCard } from '../ui/spotlight-card';
 
 export default function RewardsSubpage() {
   const { mealLogs, stats } = useAuth();
@@ -80,37 +81,42 @@ export default function RewardsSubpage() {
          
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {badges.map((badge, i) => (
-              <motion.div 
+              <GlowCard 
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                whileHover={{ y: -5 }}
-                className="bg-white dark:bg-gray-800 rounded-[40px] p-8 border border-gray-100 dark:border-gray-700 shadow-xl shadow-gray-200/30 dark:shadow-black/20 group cursor-pointer relative overflow-hidden transition-colors"
+                glowColor={badge.grad.includes('yellow') ? 'orange' : badge.grad.includes('emerald') ? 'green' : badge.grad.includes('orange') ? 'red' : 'purple'}
+                customSize={true}
+                className="w-full h-full"
               >
-                 <div className="flex justify-between items-start mb-6">
-                    <div className={cn("w-16 h-16 rounded-[24px] flex items-center justify-center", badge.bg, "dark:bg-opacity-20")}>
-                       <badge.icon size={28} className={badge.color} />
-                    </div>
-                    <div className="text-right">
-                       <p className="text-2xl font-display text-[#0d0d14] dark:text-white">{badge.progress}%</p>
-                       <p className="text-[0.55rem] font-black tracking-widest text-gray-300 dark:text-gray-500 uppercase">Complete</p>
-                    </div>
-                 </div>
-                 <h4 className="text-lg font-black tracking-tight text-[#0d0d14] dark:text-white">{badge.name}</h4>
-                 <p className="text-[0.65rem] text-gray-400 font-bold uppercase tracking-widest mt-1 mb-8 leading-relaxed">{badge.desc}</p>
-                 
-                 <div className="h-1.5 bg-gray-50 dark:bg-gray-700 rounded-full overflow-hidden">
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      animate={{ width: `${badge.progress}%` }}
-                      className={cn("h-full bg-gradient-to-r shadow-lg", badge.grad)} 
-                    />
-                 </div>
-                 
-                 {/* Background Elements */}
-                 <badge.icon size={120} className="absolute -bottom-6 -right-6 text-gray-50 dark:text-gray-700/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.div>
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-[40px] p-8 border border-white/40 shadow-xl group cursor-pointer relative overflow-hidden transition-colors h-full"
+                >
+                  <div className="flex justify-between items-start mb-6">
+                      <div className={cn("w-16 h-16 rounded-[24px] flex items-center justify-center", badge.bg, "dark:bg-opacity-20")}>
+                        <badge.icon size={28} className={badge.color} />
+                      </div>
+                      <div className="text-right">
+                        <p className="text-2xl font-display text-[#0d0d14] dark:text-white">{badge.progress}%</p>
+                        <p className="text-[0.55rem] font-black tracking-widest text-gray-300 dark:text-gray-500 uppercase">Complete</p>
+                      </div>
+                  </div>
+                  <h4 className="text-lg font-black tracking-tight text-[#0d0d14] dark:text-white">{badge.name}</h4>
+                  <p className="text-[0.65rem] text-gray-400 font-bold uppercase tracking-widest mt-1 mb-8 leading-relaxed">{badge.desc}</p>
+                  
+                  <div className="h-1.5 bg-gray-50 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${badge.progress}%` }}
+                        className={cn("h-full bg-gradient-to-r shadow-lg", badge.grad)} 
+                      />
+                  </div>
+                  
+                  {/* Background Elements */}
+                  <badge.icon size={120} className="absolute -bottom-6 -right-6 text-gray-50 dark:text-gray-700/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </motion.div>
+              </GlowCard>
             ))}
          </div>
       </div>

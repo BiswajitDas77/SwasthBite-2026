@@ -136,10 +136,11 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="flex min-h-screen bg-[#f8faff] text-[#0d0d14] font-body overflow-hidden">
+    <div className="flex min-h-screen bg-[#f8faff]/40 text-[#0d0d14] font-body overflow-hidden">
+      <div className="rgb-border"></div>
       <Dashboard3DBackground />
       {/* Sidebar */}
-      <aside className="w-72 bg-white/80 backdrop-blur-xl border-r border-gray-100 hidden lg:flex flex-col fixed h-screen z-50">
+      <aside className="w-72 bg-white/40 backdrop-blur-2xl border-r border-white/20 hidden lg:flex flex-col fixed h-screen z-50">
         <div className="p-8">
           <motion.h1 
             initial={{ opacity: 0, x: -20 }}
@@ -158,8 +159,8 @@ export default function Dashboard() {
               className={cn(
                 "w-full flex items-center justify-between px-4 py-4 text-sm font-bold transition-all rounded-2xl group relative overflow-hidden",
                 activeTab === item.id 
-                  ? "bg-white shadow-xl shadow-gray-200/50 text-[#0d0d14]" 
-                  : "text-gray-400 hover:text-gray-600 hover:bg-gray-50/50"
+                  ? "bg-white/60 shadow-xl shadow-gray-200/20 text-[#0d0d14]" 
+                  : "text-gray-400 hover:text-gray-600 hover:bg-white/20"
               )}
             >
               <div className="flex items-center gap-4 relative z-10">
@@ -177,21 +178,23 @@ export default function Dashboard() {
           ))}
         </nav>
 
-        <div className="p-6 border-t border-gray-50 space-y-2">
+        <div className="p-6 border-t border-white/10 flex justify-center">
           <button 
             onClick={logOut}
-            className="w-full flex items-center gap-4 px-4 py-4 text-sm font-bold text-red-500 hover:bg-red-50 transition-all rounded-2xl"
+            className="Btn"
           >
-            <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center">
-              <LogOut size={20} />
+            <div className="sign">
+              <svg viewBox="0 0 512 512">
+                <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
+              </svg>
             </div>
-            Logout
+            <div className="text">Logout</div>
           </button>
         </div>
       </aside>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="fixed bottom-0 w-full bg-white/90 backdrop-blur-xl border-t border-gray-100 flex lg:hidden items-center justify-start overflow-x-auto px-4 py-3 z-50 safe-area-bottom pb-6 gap-6 hide-scrollbar">
+      <nav className="fixed bottom-0 w-full bg-white/40 backdrop-blur-2xl border-t border-white/20 flex lg:hidden items-center justify-start overflow-x-auto px-4 py-3 z-50 safe-area-bottom pb-6 gap-6 hide-scrollbar">
         {navItems.map((item) => (
           <button
             key={item.id}
@@ -210,7 +213,7 @@ export default function Dashboard() {
       {/* Main Content */}
       <main className="w-full lg:ml-72 flex-1 relative pb-24 lg:pb-0">
         {/* Top Bar */}
-        <header className="h-20 lg:h-24 bg-white/40 backdrop-blur-2xl border-b border-gray-100/50 px-4 lg:px-10 flex items-center justify-between sticky top-0 z-40">
+        <header className="h-20 lg:h-24 bg-white/40 backdrop-blur-2xl border-b border-white/20 px-4 lg:px-10 flex items-center justify-between sticky top-0 z-40">
           <div className="flex items-center gap-3 lg:gap-6">
              {/* Mobile Logo */}
              <div className="lg:hidden scale-75 origin-left">
